@@ -1,12 +1,4 @@
-package rx.internal;
-
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-import rx.Producer;
-import rx.functions.Action0;
-import rx.subscriptions.Subscriptions;
-
-/**
+/*
  * Copyright 2014 Netflix, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +13,15 @@ import rx.subscriptions.Subscriptions;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package rx.internal;
+
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+import rx.Producer;
+import rx.functions.Action0;
+import rx.subscriptions.Subscriptions;
+
 public class PublisherSubscriber<T> implements Subscriber<T> {
     private final rx.Subscriber<? super T> rxSubscriber;
 
@@ -33,14 +34,7 @@ public class PublisherSubscriber<T> implements Subscriber<T> {
         rxSubscriber.setProducer(new Producer() {
             @Override
             public void request(long n) {
-                // 0.4.0.M1 of reactive streams is bugged in that Subsription.request() takes an int
-                // https://github.com/reactive-streams/reactive-streams/issues/105
-                // MUST update this after that change
-                if (n <= Integer.MAX_VALUE) {
-                    rsSubscription.request((int) n);
-                } else {
-                    rsSubscription.request(Integer.MAX_VALUE);
-                }
+                rsSubscription.request(n);
             }
         });
 

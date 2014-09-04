@@ -32,8 +32,7 @@ public class RxReactiveStreams {
         return Observable.create(new PublisherObservableOnSubscribe<T>(publisher));
     }
 
-    // Make subscriber contravariant after https://github.com/reactive-streams/reactive-streams/issues/104 is fixed
-    public static <T> void subscribe(Observable<T> observable, Subscriber<T> subscriber) {
+    public static <T> void subscribe(Observable<T> observable, Subscriber<? super T> subscriber) {
         observable.subscribe(new ObservableSubscriber<T>(subscriber));
     }
 
